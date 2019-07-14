@@ -15,6 +15,7 @@ Just like *PyCarbon*, `carbon-config` is easy to use, highly configurable, and c
 All public releases may be found here: https://www.npmjs.com/
 
 * 2019-07-14: v1.0.0: Initial release
+* 2019-07-14: v1.0.1: Added support for `ConfigurationArgs` as an object for the `get` method.
 
 ## Key Concepts
 
@@ -49,22 +50,22 @@ Reading setting values.
 
 ```
 // load a setting
-console.log(config.get('demo.setting'))
+console.log(config.get({ path: 'demo.setting' }))
 
 // load a setting, throw an exception if it doesn't exist
-console.log(config.get('demo.setting'))
+console.log(config.get({ path: 'demo.setting' }))
 
 // load a setting, with a default
-console.log(config.get('demo.setting', default=42))
+console.log(config.get({ path: 'demo.setting', defaultValue: 42 }))
 
 // use a complex key path to the setting (delimiters supported: comma, slash, colon)
-console.log(config.get('path.to.your.setting'))
-console.log(config.get('path:to:your:setting'))
-console.log(config.get('path/to/your/setting'))
+console.log(config.get({ path: 'path.to.your.setting' }))
+console.log(config.get({ path: 'path:to:your:setting' }))
+console.log(config.get({ path: 'path/to/your/setting' }))
 
-// allow os overrides via environment variables
-// if os.environ['setting'] exists, it will override what is defined in the config. handy for ci/cd or containers.
-console.log(config.get('path.to.your.setting', allow_os_override=True))
+// allow os overrides via environment variables (enabled by default)
+// if process.env['setting'] exists, it will override what is defined in the config. handy for ci/cd or containers.
+console.log(config.get({ path: 'path.to.your.setting', allowEnvironmentVariables: true }))
 ```
 
 **Sample Config**

@@ -6,6 +6,7 @@ export interface ConfigurationOptions {
   files: string[];
   environment: string;
   environments: string[];
+  throwExceptions: boolean;
   allowEnvironmentVariables: boolean;
 }
 
@@ -17,6 +18,7 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
   files: string[];
   environment: string;
   environments: string[];
+  throwExceptions: boolean = true;
   allowEnvironmentVariables: boolean = true;
 
   constructor(options?: ConfigurationOptions) {
@@ -39,6 +41,7 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
     this.files = options.files;
     this.environment = options.environment;
     this.environments = options.environments;
+    this.throwExceptions = options.throwExceptions || true;
     this.allowEnvironmentVariables = options.allowEnvironmentVariables || true;
   }
 
@@ -48,6 +51,14 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
 
     return value.split(delimiter);
   }
+}
+
+export interface ConfigurationArgs {
+  path: string;
+  environment?: string;
+  defaultValue?: any;
+  throwExceptions?: boolean;
+  allowEnvironmentVariables?: boolean;
 }
 
 /**
@@ -71,7 +82,7 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
  */
 export class Configuration {
 
-  private options: ConfigurationOptions;
+  public options: ConfigurationOptions;
   private configFiles: any;
   private configs: any;
 
@@ -93,17 +104,26 @@ export class Configuration {
     }
   }
 
-  public get(path: string, environment?: string, defaultValue?: any, throwExceptions?: boolean): any {
-    // TODO: Use destructuring to load the parameters.
-    console.log(`Loading configuration setting: ${path}, defaultValue: ${defaultValue}, environment: ${environment}, throwExceptions: ${throwExceptions}`);
+  public get(args: ConfigurationArgs): any {
+    if (!args)
+      args = {} as ConfigurationArgs;
 
-    const env = environment || this.options.environment;
+    if (!args.throwExceptions)
+      args.throwExceptions = this.options.throwExceptions;
+
+    if (!args.allowEnvironmentVariables)
+      args.allowEnvironmentVariables = this.options.allowEnvironmentVariables;
+
+    // TODO: Use destructuring to load the parameters.
+    console.log(`Loading configuration setting: ${args.path}, defaultValue: ${args.defaultValue}, environment: ${args.environment}, throwExceptions: ${args.throwExceptions}`);
+
+    const env = args.environment || this.options.environment;
     let config = this.configs[env]; // select the config for the chosen environment
 
     let lastKey = null;
-    if (path) {
+    if (args.path) {
       // paths may be separated by periods, colons, or forward-slashes
-      let keys = path.split(/[.:/]/);
+      let keys = args.path.split(/[.:/]/);
 
       // walk the paths fetching the next element
       for (let i=0; i < keys.length; i++) {
@@ -115,7 +135,7 @@ export class Configuration {
           console.log(e);
           config = null;
 
-          if (throwExceptions)
+          if (args.throwExceptions)
             throw e;
 
           break;
@@ -131,7 +151,7 @@ export class Configuration {
     // Current workflow simply looks for an environment variable using the last key
     // So in the case of myService.DATABASE_URL, it will look for process.env.DATABASE_URL.
     // This allows for any CI/CD pipeline to override settings, if you don't wish to use secrets.yml to do so.
-    if (this.options.allowEnvironmentVariables && lastKey) {
+    if (args.allowEnvironmentVariables && lastKey) {
       const envValue = process.env[lastKey];
       if (envValue)
         value = envValue;
@@ -141,7 +161,7 @@ export class Configuration {
     // TODO: Add support for parameterized values.
 
     if (!value)
-      return defaultValue;
+      return args.defaultValue;
 
     return value;
   }
