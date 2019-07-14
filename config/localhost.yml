@@ -1,0 +1,13 @@
+###############################################################################
+# WARNING:
+# This file should be added to your .gitignore and never committed.
+# For demo purposes it is added to source control.
+###############################################################################
+
+staging:
+  example:
+    DATABASE_URL: postgres://username:password@staging:5432/app-db
+
+development:
+  example:
+    DATABASE_URL: postgres://username:password@development:5432/app-db

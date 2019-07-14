@@ -1,0 +1,49 @@
+# An example service with secrets overridden by other files (localhost.yml or secrets.yml).
+---
+production:
+  example:
+    DATABASE_URL: MOCK # secret
+    list:
+      - a
+      - b
+      - c
+    multiline: >-
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Nunc nunc massa, consequat eget ante et, eleifend pellentesque risus.
+      Fusce blandit augue lorem, eget euismod augue iaculis ac.
+      Vestibulum nibh turpis, scelerisque sed sem ac, feugiat auctor ipsum.
+      Maecenas auctor dapibus diam sit amet accumsan.
+      Donec tincidunt nibh vitae augue pellentesque vulputate.
+      Morbi convallis consectetur mauris, eu suscipit orci.
+      Nam pharetra sem at hendrerit condimentum.
+      Vivamus pulvinar ipsum massa, in feugiat lorem feugiat id.
+      Fusce id turpis nisl. Suspendisse est nisi, finibus vitae sagittis et, venenatis a leo.
+      Suspendisse lacinia augue non porta suscipit. Vestibulum eu porttitor eros, vel imperdiet lectus.
+
+staging:
+  example:
+    DATABASE_URL: MOCK # secret
+
+development:
+  example:
+    DATABASE_URL: MOCK # secret
+
+local:
+  example:
+    DATABASE_URL: postgres://username:password@localhost:5432/app-db
+
+testing:
+  example:
+    DATABASE_URL: postgres://username:password@test:5432/app-testing-db
+
+# Multiple document support allows you to define all of the same root keys for separate service, if you prefer this approach.
+---
+production:
+  foo:
+    enabled: true
+
+# Separate these how you see fit.
+---
+production:
+  bar:
+    enabled: true

@@ -1,0 +1,49 @@
+{
+  "name": "carbon-config",
+  "version": "1.0.0",
+  "description": "A YAML-based configuration system for Node projects supporting tiered environments and files.",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/443labs/carbon-config.git"
+  },
+  "keywords": [
+    "yaml",
+    "json",
+    "config"
+  ],
+  "author": "Mark Belles",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/443labs/carbon-config/issues"
+  },
+  "homepage": "https://github.com/443labs/carbon-config#readme",
+  "devDependencies": {
+    "@babel/core": "7.3.3",
+    "@babel/preset-env": "7.3.1",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.15",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.0",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.5.3",
+    "webpack": "^4.17.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.5.4",
+    "@types/node": "^12.6.2",
+    "fs": "0.0.1-security",
+    "js-yaml": "^3.13.1"
+  },
+  "engine": {
+    "node": "=8.10"
+  }
+}
