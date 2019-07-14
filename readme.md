@@ -19,7 +19,7 @@ All public releases may be found here: https://www.npmjs.com/
 
 ## Key Concepts
 
-* Environments: [`production`, `staging`, `development`] - Define environments where various settings differ.
+* Environments: [`production`, `staging`, `development`, `local`, `testing`] - Define environments where various settings differ.
 * Files: [`config.yml`, `localhost.yml`, `secrets.yml`] - Define files that allow you to isolate various settings, across environments.
 * Supports multiple YAML documents per file, namespaced by an `environment`. Each providing a baseline for the next.
 * Supports multiple config files, with the opinion that some settings are not fit for source control and should be isolated.
