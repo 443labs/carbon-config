@@ -113,10 +113,7 @@ export class Configuration {
 
     if (!args.allowEnvironmentVariables)
       args.allowEnvironmentVariables = this.options.allowEnvironmentVariables;
-
-    // TODO: Use destructuring to load the parameters.
-    console.log(`Loading configuration setting: ${args.path}, defaultValue: ${args.defaultValue}, environment: ${args.environment}, throwExceptions: ${args.throwExceptions}`);
-
+    
     const env = args.environment || this.options.environment;
     let config = this.configs[env]; // select the config for the chosen environment
 
