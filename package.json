@@ -1,6 +1,6 @@
 {
   "name": "carbon-config",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A YAML-based configuration system for Node projects supporting tiered environments and files.",
   "main": "index.js",
   "scripts": {
