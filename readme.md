@@ -16,6 +16,8 @@ All public releases may be found here: https://www.npmjs.com/package/carbon-conf
 
 * 2019-07-14: v1.0.0: Initial release
 * 2019-07-14: v1.0.1: Added support for `ConfigurationArgs` as an object for the `get` method.
+* 2019-07-14: v1.0.2: Bugfixes
+* 2019-07-15: v1.0.3: Publish transpiled Node-compatible lib, rather than src.
 
 ## Key Concepts
 
