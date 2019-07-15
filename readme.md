@@ -12,7 +12,7 @@ Just like *PyCarbon*, `carbon-config` is easy to use, highly configurable, and c
 
 # Release History
 
-All public releases may be found here: https://www.npmjs.com/
+All public releases may be found here: https://www.npmjs.com/package/carbon-config
 
 * 2019-07-14: v1.0.0: Initial release
 * 2019-07-14: v1.0.1: Added support for `ConfigurationArgs` as an object for the `get` method.
