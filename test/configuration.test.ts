@@ -1,4 +1,4 @@
-import { Configuration } from "../src/configuration";
+import { Configuration } from "../src";
 
 test('load production env', () => {
   const config = new Configuration();
