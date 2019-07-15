@@ -11,3 +11,7 @@ staging:
 development:
   example:
     DATABASE_URL: postgres://username:password@development:5432/app-db
+
+test:
+  foo:
+    enabled: false

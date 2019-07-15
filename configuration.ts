@@ -32,10 +32,10 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
         options.files = this.stringToArray(process.env.CONFIG_FILES) || ['config.yml', 'localhost.yml', 'secrets.yml'];
 
     if (!options.environment)
-      options.environment = process.env.CONFIG_ENV || 'local';
+      options.environment = process.env.NODE_ENV || 'development';
 
     if (!options.environments)
-      options.environments = this.stringToArray(process.env.CONFIG_ENVS) || ['production', 'staging', 'development', 'local', 'testing'];
+      options.environments = this.stringToArray(process.env.NODE_ENVS) || ['production', 'staging', 'development', 'test'];
 
     this.directory = options.directory;
     this.files = options.files;
@@ -83,8 +83,8 @@ export interface ConfigurationArgs {
 export class Configuration {
 
   public options: ConfigurationOptions;
-  private configFiles: any;
-  private configs: any;
+  private configFiles: any = [];
+  private configs: any = {};
 
   constructor(options?: ConfigurationOptions) {
     this.options = new DefaultConfigurationOptions(options);
@@ -113,7 +113,7 @@ export class Configuration {
 
     if (!args.allowEnvironmentVariables)
       args.allowEnvironmentVariables = this.options.allowEnvironmentVariables;
-    
+
     const env = args.environment || this.options.environment;
     let config = this.configs[env]; // select the config for the chosen environment
 
@@ -129,11 +129,10 @@ export class Configuration {
         try {
           config = config[key];
         } catch (e) {
-          console.log(e);
           config = null;
 
           if (args.throwExceptions)
-            throw e;
+            throw new Error(`Path: ${args.path} not found in Environment: ${env}, Error: ${e}`);
 
           break;
         }
@@ -157,7 +156,7 @@ export class Configuration {
     // TODO: Add support for AWS secrets manager.
     // TODO: Add support for parameterized values.
 
-    if (!value)
+    if (value === undefined)
       return args.defaultValue;
 
     return value;
@@ -219,7 +218,7 @@ export class Configuration {
           let result = this.merge(key, v);
           a[k] = result;
         } else {
-          a[k] = b[k];
+          a[k] = Object.assign(a[k] || {}, b[k]);
         }
       }
     }

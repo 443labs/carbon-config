@@ -19,7 +19,7 @@ All public releases may be found here: https://www.npmjs.com/
 
 ## Key Concepts
 
-* Environments: [`production`, `staging`, `development`] - Define environments where various settings differ.
+* Environments: [`production`, `staging`, `development`, `test`] - Define environments where various settings differ. Should evaluate to one of `NODE_ENV`.
 * Files: [`config.yml`, `localhost.yml`, `secrets.yml`] - Define files that allow you to isolate various settings, across environments.
 * Supports multiple YAML documents per file, namespaced by an `environment`. Each providing a baseline for the next.
 * Supports multiple config files, with the opinion that some settings are not fit for source control and should be isolated.
@@ -81,9 +81,12 @@ staging:
 
 development:
   foo: dev-value
+ 
+test:
+  foo: test-value
 ```
 
-The assumption is that your CI/CD tool will be setting the `CONFIG_ENV` to one of the pre-defined environments, such that isolating deployment settings is simple.
+The assumption is that your CI/CD tool will be setting the `NODE_ENV` to one of the pre-defined environments, such that isolating deployment settings is simple.
 
 ## Environments
 
@@ -96,15 +99,15 @@ The following `environments` are supported by default, each inheriting or overri
 * `development`: Inherits and overrides `staging` then `production` values.
 * `testing`: Inherits and overrides `development` then `staging` then `production` values.
 
-Environments may be overriden by setting the `CONFIG_ENVS` environment variable, or by constructor injection.
+Environments may be overriden by setting the `NODE_ENVS` environment variable, or by constructor injection.
 
 ```
 # separate each environment name with a space
-export CONFIG_ENVS=production staging development
+export NODE_ENVS=production staging development test
 ```
 
 ```
-const config = new Configuration({ environments: ['prod`, `stage`, `development`] });
+const config = new Configuration({ environments: ['production`, `staging`, `development`, `test`] });
 ```
 
 Feel free to define your own environment hierarchy. The first in the list is the baseline. 

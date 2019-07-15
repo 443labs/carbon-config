@@ -2,6 +2,7 @@
 ---
 production:
   example:
+    baz: qux
     DATABASE_URL: MOCK # secret
     list:
       - a
@@ -28,12 +29,9 @@ development:
   example:
     DATABASE_URL: MOCK # secret
 
-local:
+test:
   example:
-    DATABASE_URL: postgres://username:password@localhost:5432/app-db
-
-testing:
-  example:
+    baz: qux
     DATABASE_URL: postgres://username:password@test:5432/app-testing-db
 
 # Multiple document support allows you to define all of the same root keys for separate service, if you prefer this approach.

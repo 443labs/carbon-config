@@ -4,7 +4,7 @@
   "description": "A YAML-based configuration system for Node projects supporting tiered environments and files.",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
