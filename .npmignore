@@ -23,5 +23,3 @@ CHANGELOG.md
 .eslintrc
 .babelrc
 .gitignore
-
-babel.config.js

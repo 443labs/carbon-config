@@ -1,10 +1,11 @@
 {
   "name": "carbon-config",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A YAML-based configuration system for Node projects supporting tiered environments and files.",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production babel src --out-dir lib",
+    "build": "rm -rf ./lib && babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "publish": "npm run-script build && npm publish",
     "test": "jest"
   },
   "files": [
@@ -28,8 +29,11 @@
   "homepage": "https://github.com/443labs/carbon-config#readme",
   "devDependencies": {
     "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
     "@babel/preset-typescript": "^7.3.3",
     "@types/jest": "^24.0.15",
     "@typescript-eslint/eslint-plugin": "^1.6.0",

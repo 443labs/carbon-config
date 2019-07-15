@@ -23,7 +23,7 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
 
   constructor(options?: ConfigurationOptions) {
     if (!options)
-      options = {} as any;
+      options = {} as ConfigurationOptions;
 
     if (!options.directory)
         options.directory = process.env.CONFIG_DIR || 'config';
@@ -45,9 +45,9 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
     this.allowEnvironmentVariables = options.allowEnvironmentVariables || true;
   }
 
-  private stringToArray(value: string, delimiter: string = ' '): string[] {
+  private stringToArray(value: string | undefined, delimiter: string = ' '): string[] {
     if (!value)
-      return undefined;
+      return undefined as any;
 
     return value.split(delimiter);
   }
@@ -178,7 +178,7 @@ export class Configuration {
     return config;
   }
 
-  private loadConfigFile(filename): any {
+  private loadConfigFile(filename: string): any {
     const yaml = require('js-yaml');
     const fs = require('fs');
     const data = fs.readFileSync(filename, 'utf8');
@@ -186,7 +186,7 @@ export class Configuration {
     return docs;
   }
 
-  private loadConfigFiles(directory, files): any {
+  private loadConfigFiles(directory: string, files: string[]): any {
     const path = require('path');
     const fs = require('fs');
 
@@ -210,7 +210,7 @@ export class Configuration {
     return configFiles;
   }
 
-  private merge(a, b) {
+  private merge(a: any, b: any) {
     if (b) {
       for (const [k, v] of Object.entries(b)) {
         if (Symbol.iterator in Object(v)) {
