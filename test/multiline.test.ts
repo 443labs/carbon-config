@@ -1,4 +1,4 @@
-import { Configuration } from "../configuration";
+import { Configuration } from "../src/configuration";
 
 test('load multiline value', () => {
   const config = new Configuration();

@@ -1,4 +1,4 @@
-import { Configuration } from "./configuration";
+import { Configuration } from "../src/configuration";
 
 test('load production env', () => {
   const config = new Configuration();
@@ -43,8 +43,10 @@ test('load test env', () => {
 test('load value using fallbacks', () => {
   const config = new Configuration();
 
-  // this will fall back and load from the production environment, since it isn't a secret and has no reason to be overridden
-  expect(config.get({ path: 'foo.enabled' })).toBe(true);
+  // foo.enabled: true is set in production, but overridden in localhost.yml
+  expect(config.get({ path: 'foo.enabled' })).toBe(false);
+
+  // bar.enabled: true is set in production, so the test env will fallback to that value
   expect(config.get({ path: 'bar.enabled' })).toBe(true);
 });
 
