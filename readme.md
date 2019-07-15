@@ -19,6 +19,7 @@ All public releases may be found here: https://www.npmjs.com/package/carbon-conf
 * 2019-07-14: v1.0.2: Bugfixes
 * 2019-07-15: v1.0.3: Publish transpiled Node-compatible lib, rather than src.
 * 2019-07-15: v1.0.4: Bugfixes for babel and typescript.
+* 2019-07-15: v1.0.5: Republish.
 
 ## Key Concepts
 
