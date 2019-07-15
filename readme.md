@@ -39,7 +39,7 @@ Set it using an environment variable, or in the constructor.
 import { Configuration } from "carbon-config";
 
 // load files from specified directory (the default is './config/')
-const config = new Configuration({ directory: '/path/to/your/config/files' });
+const config = new Configuration({ directory: 'path/to/your/config/files' });
 
 # alternatively use environment variables
 process.env.CONFIG_DIR = '/path/to/your/config/files' # or export it
