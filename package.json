@@ -49,6 +49,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
     "@types/node": "^12.6.2",
+    "aws-sdk": "^2.493.0",
     "fs": "0.0.1-security",
     "js-yaml": "^3.13.1"
   },

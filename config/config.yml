@@ -39,6 +39,7 @@ test:
 production:
   foo:
     enabled: true
+    secret: ${ssm:example~true}
 
 # Separate these how you see fit.
 ---

@@ -8,6 +8,7 @@ export interface ConfigurationOptions {
   environments: string[];
   throwExceptions: boolean;
   allowEnvironmentVariables: boolean;
+  awsRegion: string;
 }
 
 /**
@@ -20,6 +21,7 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
   environments: string[];
   throwExceptions: boolean = true;
   allowEnvironmentVariables: boolean = true;
+  awsRegion: string = 'us-west-2';
 
   constructor(options?: ConfigurationOptions) {
     if (!options)
@@ -37,12 +39,16 @@ export class DefaultConfigurationOptions implements ConfigurationOptions {
     if (!options.environments)
       options.environments = this.stringToArray(process.env.NODE_ENVS) || ['production', 'staging', 'development', 'test'];
 
+    if (!options.awsRegion)
+      options.awsRegion = process.env.REGION || 'us-west-2';
+
     this.directory = options.directory;
     this.files = options.files;
     this.environment = options.environment;
     this.environments = options.environments;
     this.throwExceptions = options.throwExceptions || true;
     this.allowEnvironmentVariables = options.allowEnvironmentVariables || true;
+    this.awsRegion = options.awsRegion;
   }
 
   private stringToArray(value: string | undefined, delimiter: string = ' '): string[] {
@@ -59,6 +65,7 @@ export interface ConfigurationArgs {
   defaultValue?: any;
   throwExceptions?: boolean;
   allowEnvironmentVariables?: boolean;
+  awsRegion?: string;
 }
 
 /**
@@ -104,7 +111,7 @@ export class Configuration {
     }
   }
 
-  public get(args: ConfigurationArgs): any {
+  public async get(args: ConfigurationArgs): Promise<any> {
     if (!args)
       args = {} as ConfigurationArgs;
 
@@ -113,6 +120,9 @@ export class Configuration {
 
     if (!args.allowEnvironmentVariables)
       args.allowEnvironmentVariables = this.options.allowEnvironmentVariables;
+
+    if (!args.awsRegion)
+      args.awsRegion = this.options.awsRegion;
 
     const env = args.environment || this.options.environment;
     let config = this.configs[env]; // select the config for the chosen environment
@@ -153,13 +163,56 @@ export class Configuration {
         value = envValue;
     }
 
-    // TODO: Add support for AWS secrets manager.
     // TODO: Add support for parameterized values.
 
+    // AWS Secret Manager Secrets
+    value = await this.getSecret(value, args.awsRegion);
+
+    // fallback to the default value
     if (value === undefined)
       return args.defaultValue;
 
     return value;
+  }
+
+  private async getSecret(value: string, region: string): Promise<any> {
+    // Regex to test for ${ssm:/aws/reference/secretsmanager/foo~true}
+    const regex = /\${ssm:([A-Za-z0-9_\-\/]+)(~?true|false)\}/gm;
+
+    // https://regex101.com
+    // \$\{ssm:([A-Za-z0-9_\-\/]+)(~?true|false)\}
+
+    // @ts-ignore: TS2525
+    let [, secretName, encrypted] = regex.exec(value) || [];
+
+    if (!secretName)
+      return value;
+
+    // find and remove the '~true'
+    if (!encrypted) {
+      encrypted = 'false';
+    }
+    else {
+      encrypted = encrypted.replace('~', '');
+    }
+
+    const AWS = require("aws-sdk");
+    const client = new AWS.SecretsManager({apiVersion: '2017-10-17', region: region });
+    // const secret = await client.getSecretValue({ SecretId: secretName as any }).promise();
+    // console.log(`AWS Secret Fetched Successfully. Path: ${path}`);
+    // return secret;
+
+    let secret = null;
+    const response = await client.getSecretValue({SecretId: secretName}).promise();
+    if ('SecretString' in response) {
+      secret = response.SecretString;
+    } else {
+      const buff = new Buffer(response.SecretBinary, 'base64');
+      secret = buff.toString('ascii');
+    }
+
+    console.log(`Loaded AWS Secret Manager secret: ${secret}`);
+    return secret;
   }
 
   // private buildConfig(environment: string, baseline: Map<string, any>): Map<string, any> {
